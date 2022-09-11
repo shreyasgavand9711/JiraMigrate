@@ -13,7 +13,12 @@ namespace DataAcess.entits
 {
    public class DAL_Action
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["devconnection"].ConnectionString;
+        string connectionString;
+
+        public DAL_Action(string connectionsString)
+        {
+            connectionString = connectionsString;
+        }
         public void SetAction(Actions Actions)
         {
 

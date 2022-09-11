@@ -1,0 +1,41 @@
+﻿
+@model ViewModel.LableListViewModel
+
+@{
+    ViewBag.Title = "addLable";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+
+   
+
+    @using (Html.BeginForm("AddLable", "Home", FormMethod.Post))
+    {
+        <lebel>Label Name</lebel>
+        <div>
+            @Html.TextBoxFor(x => x.LableName, new { id = "lableid" })
+        <button type="submit" class="btn btn-default">Add Label</button>
+    </div>
+
+
+
+
+
+
+}
+
+
+
+
+}
+}
+
+@section scripts{
+
+    <script>
+
+
+
+    </script>
+
+}

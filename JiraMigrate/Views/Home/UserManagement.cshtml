@@ -1,0 +1,155 @@
+﻿@model List<ViewModel.UserSignupViewModel>
+
+@{
+    ViewBag.Title = "UserManagement";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+
+
+    <div> <h1 style="font-weight:bold;text-align:center">User List</h1></div>
+
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody >
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.Id">
+
+                        <td id="usernameId">@item.Username</td>
+                        <td id="nameId">@item.Name</td>
+                        <td id="firstNameId">@item.FirstName</td>
+                        <td id="lastNameId">@item.LastName</td>
+                        <td>
+
+                            <a href="@Url.Action("EditUser",new {id = item.Id })" class="btn btn-success">Edit</a>
+                            <button type="button" onclick="DeleteUserWithConfirm(@item.Id)" class="btn btn-success">Delete </button>
+                            <button type="button" onclick="GetTaskList(@item.Id)"  class="btn btn-success" >View Task</button>
+
+                            @*<a href="@Url.Action("ViewTask",new {id = item.Id })" class="btn btn-success" data-toggle="modal" data-target="#edit_modal">View Task</a>*@
+                        </td>
+                        <td style="visibility:hidden" id="userId">@item.Id</td>
+
+                    </tr>
+
+                }
+            </tbody>
+
+        </table>
+        <div>
+            <a href="@Url.Action("Todo")" class="btn btn-default" style="float: left" >  Back </a>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="edit_modal" style="align-content:baseline" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="height:auto;width:600px">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="text-align:center">Task List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-id">
+
+                </div>
+                <div class="modal-footer">
+                   
+                    <button type="button" class="btn btn-default common-cancel" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section scripts{
+
+    <script>
+        function DeleteUserWithConfirm(id) {
+            commonAjaxCall({
+                /* window.location.replace("/Home/Delete?id="+id);*/
+                url: "/Home/GetUserCount?id=" + id,
+                success: (response) => {
+
+                    if (response.count == 0) {
+                        CommonNotifier.showConfirmationWithCallback("Do you want to Delete", function () {
+                            DeleteUser(id);
+                        }, function () {
+
+                        })
+                    }
+                    else {
+
+                        CommonNotifier.showInformation("already have a task is present in active or todo please assignee a task to another user")
+                    }
+
+
+                }
+            })
+        }
+
+        function DeleteUser(id) {
+            commonAjaxCall({
+
+                url: "/Home/DeleteUser?id=" + id,
+                success: (response) => {
+                   
+                    if (response.data == true) {
+
+                        $('#' + id).remove();
+                       
+
+                       
+                    }
+                    else {
+                        CommonNotifier.showInformation("Somthing wrong")
+
+                    }
+
+                }
+            })
+        }
+
+        function GetTaskList(id) {
+            commonAjaxCall({
+
+                url: "/Home/ViewTask?id=" + id,
+                success: (response) => {
+                    if (response.data != false) {
+
+                        $("#modal-body-id").html(response.data);
+                        $("#edit_modal").modal('show')
+                    }
+                        let findTr = $("#tbody").find('tr');
+                        
+                        if (findTr.length == 0) {
+
+
+                            $("#modal-body-id").html("no task asssignee for user");
+                        }
+                        
+                    else {
+                       
+
+                    }
+
+                }
+            })
+        }
+
+
+    </script>
+}

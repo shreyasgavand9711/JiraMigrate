@@ -12,6 +12,11 @@ namespace BusinessLogic
 {
     public class BL_AddTeam
     {
+        DAL_AddTeam connectionStringAction;
+        public BL_AddTeam(string connectionString)
+        {
+            this.connectionStringAction = new DAL_AddTeam(connectionString);
+        }
         public void SaveTeam(TeamsViewModel model)
         {
             Team AddTeam = new Team();
@@ -26,7 +31,7 @@ namespace BusinessLogic
                 Members.Rows.Add(item);
             }
             AddTeam.TeamMember = Members;
-            new DAL_AddTeam().SaveTeam(AddTeam);
+            connectionStringAction.SaveTeam(AddTeam);
 
         }
 
@@ -34,7 +39,7 @@ namespace BusinessLogic
         {
 
             List<CommonDropdownType> UserList = new List<CommonDropdownType>();
-            foreach (var item in new DAL_AddTeam().UserList())
+            foreach (var item in connectionStringAction.UserList())
             {
                 CommonDropdownType User = new CommonDropdownType();
 
@@ -52,7 +57,7 @@ namespace BusinessLogic
         public List<TeamsViewModel> TeamsList()
         {
             List<TeamsViewModel> TeamList = new List<TeamsViewModel>();
-            List<Team> TeamsList = new DAL_AddTeam().TeamsList();
+            List<Team> TeamsList = connectionStringAction.TeamsList();
 
 
             foreach (var item in TeamsList)
@@ -77,7 +82,7 @@ namespace BusinessLogic
         public List<TeamsViewModel> MemberList(int TeamID)
         {
             List<TeamsViewModel> MemberList = new List<TeamsViewModel>();
-            List<TeamMember> model = new DAL_AddTeam().MemberList(TeamID);
+            List<TeamMember> model = connectionStringAction.MemberList(TeamID);
         
 
             foreach (var item in model)

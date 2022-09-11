@@ -1,0 +1,65 @@
+﻿@model ViewModel.TeamsViewModel
+
+@{
+    ViewBag.Title = "Create Team";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+    <h1 style="text-align:center">Create Team</h1>
+
+
+    @using (Html.BeginForm("CreateTeam", "AddTeam", FormMethod.Post))
+    {
+        <div class="pb-1">
+            <label style="display:block">Team Name</label>
+            <div>
+                @Html.TextBoxFor(x => x.TeamName, new { Style = "width:25%" })
+                @Html.ValidationMessageFor(x => x.TeamName, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+        <div class="pb-1">
+            <label style="display:block">Team Leader Name</label>
+            <select id="TeamLeder" name="TeamLeder" class="select-2 col-lg-3">
+                <option></option>
+                @foreach (var item in Model.TeamLeders)
+                {
+                    <option value="@item.id">@item.text</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(x => x.TeamLeder, "", new { @class = "text-danger" })
+        </div>
+        <div class="pb-1">
+            <label style="display:block">Team Member Name</label>
+            @*<div>
+                    @Html.ListBoxFor(x => x.TeamMember1, Model.TeamLeders)
+                </div>*@
+            <select id="TeamMember" name="TeamMember1" class="select-2 col-lg-3" multiple>
+
+                @foreach (var item in Model.TeamLeders)
+                {
+                    <option value="@item.id">@item.text</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(x => x.TeamMember1, "", new { @class = "text-danger" })
+            @*<span class="field-validation-error text-danger" data-valmsg-for="TeamLeder" data-valmsg-replace="true">please enter team leader name</span>*@
+        </div>
+        <div style="margin-top:15px;">
+
+
+            <button type="submit" class="btn btn-success" style="float: right;">Create Team</button>
+
+        </div>
+
+    }
+
+}
+
+@section scripts{
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+  
+
+}

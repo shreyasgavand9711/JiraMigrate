@@ -1,0 +1,121 @@
+﻿@model ViewModel.TaskTableViewModel
+@{
+    ViewBag.Title = "FilForm";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+
+@section Grid{
+    @using (Html.BeginForm("AddTask", "Home", FormMethod.Post))
+    {
+       
+        <div style="font-weight:600;">Add new task</div>
+        <div>
+            <label>Task Name</label>
+            <div>@Html.TextBoxFor(x => x.taskName)</div>
+            @Html.ValidationMessageFor(x => x.taskName, "", new { @class = "text-danger" })
+        </div>
+        <div>
+            <label>Description</label>
+            <div>@Html.TextBoxFor(x => x.description)</div>
+            @Html.ValidationMessageFor(x => x.description, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="mt-1">
+            <label style="display:block;">Task Current Status</label>
+            <select id="sagar" name="taskStatus" class="select-2 col-lg-3">
+                @foreach (var item in Model.taskStatusList)
+                {
+                    <option value="@item.id">@item.text</option>
+                }
+            </select>
+
+
+        </div>
+
+        <div class="mt-1">
+            <label style="display:block;">Assignee</label>
+            <select name="assigneeId" class="select-2 col-lg-3">
+                @foreach (var item in Model.userList)
+                {
+                    <option value="@item.id" selected>@item.text</option>
+                }
+            </select>
+
+
+
+        </div>
+        <div class="mt-1">
+            <label style="display:block;">Reporters</label>
+            <select name="reporterId" class="select-2 col-lg-3">
+                @foreach (var item in Model.userList)
+                {
+                    <option value="@item.id" selected>@item.text</option>
+                }
+            </select>
+
+
+        </div>
+        <div class="mt-1">
+            <label style="display:block;">Flag</label>
+            <select id="Flags" name="Flags" class="select-2 col-lg-3" multiple>
+                @foreach (var item in Model.FlagList)
+                {
+                    <option value="@item.id">@item.text</option>
+                }
+            </select>
+        </div>
+
+
+
+        <div>
+            <lebel>Select Label Name</lebel>
+            <select id="LableName" name="LableName" class="select-2 col-lg-3" multiple>
+                @foreach (var item in Model.labelList)
+                {
+                    <option value="@item.id">@item.text</option>
+                }
+            </select>
+
+        </div>
+        <div>
+
+            <lebel>Sprint Name</lebel>
+            <select id="sprintName" name="sprintName" class="select-2 col-lg-3">
+                @foreach (var item in Model.sprintList)
+                {
+                    <option value="@item.id">@item.text</option>
+                }
+            </select>
+        </div>
+
+
+
+        <div style="margin-top:15px;">
+
+            <button type="reset" class="btn btn-danger" style="float:right;margin-left:15px">Clear All</button>
+            <button type="submit" style="float: right;" class="btn btn-success">Add</button>
+
+        </div>
+
+
+    }
+    <br />
+    @*@Html.ActionLink("User Management", "UserManagement")*@
+}
+
+    }
+
+
+@section scripts{
+
+    @{
+        <partial name="_ValidationScriptsPartial" />}
+        <script>
+
+            function Test() {
+                CommonNotifier.showInformation("hiee");
+                CommonNotifier.showError("Error");
+            }
+        </script>
+
+}

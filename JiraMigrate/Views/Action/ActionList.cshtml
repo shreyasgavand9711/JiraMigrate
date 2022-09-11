@@ -1,0 +1,40 @@
+﻿@model List<ViewModel.UserActions>
+@{
+    ViewBag.Title = "ActionList";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+
+    <h1 style="text-align:center">Action List</h1>
+
+    @*<a href="@Url.Action("CreateTeam")" class="btn btn-success">Create Team</a>*@
+    @*<button type="button" onclick="ViewTeamMember(TeamID)" class="btn btn-success" data-toggle="modal" data-target="#edit_modal">Add Flag</button>*@
+<a href="@Url.Action("SetACtion", "Action")" class="btn btn-success" style="float:right">Create Action</a>
+    @*@Html.ActionLink("Set ACtion", "SetACtion", "Action")*@
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>Action Name</th>
+                <th>Controller Name</th>
+                <th>Display Name</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="text-align:center">
+
+                    <td>@item.ActionName</td>
+                    <td>@item.ControllerName</td>
+                    <td>@item.DisplayName</td>
+                </tr>
+            }
+
+
+
+        </tbody>
+
+    </table>
+}

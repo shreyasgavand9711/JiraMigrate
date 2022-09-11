@@ -1,0 +1,61 @@
+﻿@model List<ViewModel.TaskTableViewModel>
+@{
+    ViewBag.Title = "Completed";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+    @*@{Html.RenderPartial("PartialLinksView", "Completed");}*@
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Description</th>
+                    <th>UserName</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.taskId">
+                        <td>@item.taskName</td>
+                        <td>@item.description</td>
+                        <td>@item.userName</td>
+                        <td>
+                            <button type="button" onclick="DeleteTask(@item.taskId)">Delete</button>
+                            @*<a href="@Url.Action("Delete",new {id = item.taskId })" class="btn btn-danger">Delete</a>*@
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+}
+
+@section scripts{
+
+    <script>
+        function DeleteTask(id) {
+            CommonNotifier.showInformation("task deleted", function () {
+                Delete(id)
+            })
+        }
+        function Delete(id) {
+            commonAjaxCall({
+                /* window.location.replace("/Home/Delete?id="+id);*/
+                url: "/Home/Delete?id=" + id,
+                success: (response) => {
+                    $('#' + id).remove();
+                }
+            })
+
+        }
+
+    </script>
+}

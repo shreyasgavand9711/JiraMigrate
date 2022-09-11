@@ -12,6 +12,7 @@ namespace ViewModel
 
 
         [Required(ErrorMessage = "please enter team name")]
+        [StringLength(20, ErrorMessage = "Last name lenght is not more than 20 character")]
         public string TeamName { get; set; }
 
         [Required(ErrorMessage = "please enter team leader name")]
