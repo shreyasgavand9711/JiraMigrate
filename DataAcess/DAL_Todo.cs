@@ -13,7 +13,14 @@ namespace DataAcess
 {
     public class DAL_Todo
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["devconnection"].ConnectionString;
+       
+
+        string connectionString;
+
+        public DAL_Todo(string connectionsString)
+        {
+            connectionString = connectionsString;
+        }
         public void SaveTodo(TaskDataTable AddTask)
         {
             //string sql = @"INSERT INTO [dbo].[taskDataTable]
@@ -123,7 +130,10 @@ namespace DataAcess
         }
         public void DeleteRecord(int Id)
         {
-            string sql = "delete from taskDataTable Where taskId = @Id";
+         //   string sql = "delete from taskDataTable Where taskId = @Id";
+            string sql = @"delete from Task_LableList Where taskId = @Id
+                         delete from FlagList Where taskId = @Id
+                         delete from taskDataTable Where taskId = @Id";
             using (var db = new SqlConnection(connectionString))
             {
                 db.Open();

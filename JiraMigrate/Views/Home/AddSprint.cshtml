@@ -1,0 +1,33 @@
+﻿
+@model ViewModel.SprintListViewModel
+
+@{
+    ViewBag.Title = "addLable";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+
+   
+
+    @using (Html.BeginForm("AddLable", "Home", FormMethod.Post))
+    {
+        <lebel>Label Name</lebel>
+        <div>@Html.TextBoxFor(x => x.SprintName, new { id = "sprintid" }) </div>
+        <div> <input type="submit" class="btn btn-default" /></div>
+
+
+
+
+
+    }
+}
+
+@section scripts{
+
+    <script>
+
+
+
+    </script>
+
+}

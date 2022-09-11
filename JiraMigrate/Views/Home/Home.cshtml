@@ -1,0 +1,208 @@
+﻿@model ViewModel.TaskTableDataModel
+
+@{
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+
+@section Grid{
+    <h1>Welcome To task management System</h1>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>To Do</th>
+                    <th>Active</th>
+                    <th>Completed</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td Style="width: 33%;">
+                        @foreach (var item in Model.Todo)
+                        {
+                            <div id="@item.taskId" Style="height: 30%; border: solid 1px; padding: 10px;">
+                                <label id="@("taskname"+item.taskId)">@item.taskName</label><br>
+                                <p id="@("descriptionid"+item.taskId)">@item.description</p><br>
+
+                                <a href="@Url.Action("MoveInToActive",new {id = item.taskId })" class="btn btn-success">Forword</a>
+                                @*<button type="button" onclick="editTask(@item.taskId,1)" id="@("edit_id"+item.taskId)" class="btn btn-success" data-toggle="modal" data-target="#edit_modal">Edit </button>*@
+                                <button type="button" class="btn btn-danger" onclick="DeleteTask(@item.taskId)">Delete</button>
+
+                                @*<td style="visibility:hidden" id="@("statusid"+item.taskId)">@item.taskStatus</td>
+                                    <td style="visibility:hidden" id="@("userid"+item.taskId)">@item.assigneeId</td>
+                                    <td style="visibility:hidden" id="@("taskid"+item.taskId)" >@item.taskId</td>*@
+
+                            </div><br>
+                        }
+
+                    <td Style="width:33%;">
+                        @foreach (var item in Model.Active)
+                        {
+                            <div id="@item.taskId" Style="height: 30%; border: solid 1px; padding: 10px;">
+                                <label id="@("taskname"+item.taskId)">@item.taskName</label><br>
+                                <p id="@("descriptionid"+item.taskId)">@item.description</p><br>
+
+                                <a href="@Url.Action("MoveInToCompleted",new {id = item.taskId })" class="btn btn-success">Forword</a>
+                                <a href="@Url.Action("MoveInToToDo",new {id = item.taskId })" class="btn btn-success">Backword</a>
+                                @*<button type="button" onclick="editTask(@item.taskId,2)" id="@("edit_id"+item.taskId)" class="btn btn-success" data-toggle="modal" data-target="#edit_modal">Edit </button>*@
+                                <button type="button" class="btn btn-danger" onclick="DeleteTask(@item.taskId)">Delete</button>
+
+                                @*<td style="visibility:hidden" id="@("statusid"+item.taskId)">@item.taskStatus</td>
+                                    <td style="visibility:hidden" id="@("userid"+item.taskId)">@item.assigneeId</td>
+                                    <td style="visibility:hidden" id="@("taskid"+item.taskId)" >@item.taskId</td>*@
+
+                            </div><br>
+                        }
+                    </td>
+
+                    <td Style="width: 34%">
+                        @foreach (var item in Model.Completed)
+                        {
+                            <div id="@item.taskId" Style="height: 30%; border: solid 1px; padding: 10px;">
+                                <label id="@("taskname"+item.taskId)">@item.taskName</label><br>
+                                <p id="@("descriptionid"+item.taskId)">@item.description</p><br>
+
+                                <a href="@Url.Action("MoveInToActive",new {id = item.taskId })" class="btn btn-success">Backword</a>
+                                <button type="button" class="btn btn-danger" onclick="DeleteTask(@item.taskId)">Delete</button>
+
+                                @*<td style="visibility:hidden" id="@("statusid"+item.taskId)">@item.taskStatus</td>
+                                    <td style="visibility:hidden" id="@("userid"+item.taskId)">@item.assigneeId</td>
+                                    <td style="visibility:hidden" id="@("taskid"+item.taskId)" >@item.taskId</td>*@
+
+                            </div><br>
+                        }
+                    </td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    @*<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="height:auto;width:600px">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-body-id">
+
+                        <br />
+                        ...
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
+}
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript"> 
+
+
+
+        function DeleteTask(id) {
+            CommonNotifier.showConfirmationWithCallback("Are You Sure you want to delete this task?" + id, function () {
+                Delete(id)
+            },
+                function () {
+            })
+        }
+        function Delete(id) {
+            commonAjaxCall({
+                /* window.location.replace("/Home/Delete?id="+id);*/
+                url: "/Home/Delete?id=" + id,
+                success: (response) => {
+                    
+                    if (response.data) {
+                        $('#' + id).remove();
+                    }
+                }
+            })
+        }
+
+        //    function editTask(id, statusId) {
+        //        alert(id+ ""+ statusId);
+        //    //let tasnameTd = $("#taskname" + id).text();
+        //    //$("#taskname-id").val(tasnameTd);
+
+        //    //let discriptionTd = $("#descriptionid" + id).text();
+        //    //$("#description-id").val(discriptionTd);
+
+
+        //    //let tasidTd = $("#taskid" + id).text();
+        //    //$("#taskid-id").val(tasidTd);
+
+        //    //let statusTd = $("#statusid" + id).text();
+        //    //$("#status-id").val(statusTd);
+        //    //$("#status-id").select2()
+
+        //    //let userTd = $("#userid" + id).text();
+        //    //if (userTd != '') {
+        //    //    $("#user-id").val(userTd)
+        //    //    $("#user-id").select2()
+        //    //}
+        //    //else {
+        //    //    $("#user-id").val("")
+        //    //    $("#user-id").select2()
+        //    //}
+        //    commonAjaxCall({
+
+        //        url: "/Home/GetTask?TaskID=" + id + "&statusId=" + statusId,
+        //        success: (response) => {
+        //            if (response.data != false) {
+
+        //                $("#modal-body-id").html(response.data);
+        //                $("#edit_modal").modal('show')
+        //            }
+
+        //        }
+        //    })
+
+
+        //}
+
+        //    function updateTask(model) {
+        //    //alert(id)
+        //    //let model = {
+        //    //    taskId: $('#taskid-id').val(),
+        //    //    taskName: $('#taskname-id').val(),
+        //    //    description: $('#description-id').val(),
+        //    //    taskStatus: $('#status-id').val(),
+        //    //    assigneeId: $('#user-id').val(),
+        //    //}
+
+        //    //console.log(model)
+
+        //    //alert(model)
+        //        alert(Model.taskName)
+        //    commonAjaxCall({
+        //        url: '/home/UpdateTask',
+        //        method: 'PUT',
+        //        data: { model },
+        //        success: res => {
+        //            console.log(res)
+        //            if (res.data == true) {
+        //                alert(res.data)
+        //                location.reload(true);
+        //            }
+        //            else {
+        //                CommonNotifier.showInformation("Somthing wrong")
+        //            }
+        //        }
+        //    });
+        //}
+
+
+
+
+    </script>
+}

@@ -10,11 +10,18 @@ namespace ViewModel
     {
         public int taskId { get; set; }
 
-        [Required(ErrorMessage = "please enter task name")]
+        //[Required(ErrorMessage = "please enter task name")]
+        [Required]
+        [StringLength(20, ErrorMessage = "Last name lenght is not more than 20 character")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter only character")]
         public string taskName { get; set; }
         public int? taskStatus { get; set; }
 
-        [Required(ErrorMessage = "pleas enter description")]
+       // [Required(ErrorMessage = "pleas enter description")]
+
+        [Required]
+        [StringLength(50, ErrorMessage = "Last name lenght is not more than 50 character")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter only character")]
         public string description { get; set; }
 
         public int? assigneeId { get; set; }

@@ -13,7 +13,12 @@ namespace DataAcess
 {
     public class DAL_AddTeam
     {
-        string connectionString = ConfigurationManager.ConnectionStrings["devconnection"].ConnectionString;
+        string connectionString;
+
+        public DAL_AddTeam(string connectionsString)
+        {
+            connectionString = connectionsString;
+        }
         public void SaveTeam(Team AddTeam)
         {
 

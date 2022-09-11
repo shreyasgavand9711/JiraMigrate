@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Authentication;
+using BusinessLogic;
+using Microsoft.AspNetCore.Http;
+
 namespace JiraMigrate
 {
     public class Startup
@@ -35,7 +38,17 @@ namespace JiraMigrate
             services.AddScoped<BL_Authentication>(provider => 
             new BL_Authentication(Configuration.GetConnectionString("devconnection"))
             );
+            services.AddScoped<BL_Todo>(provider =>
+            new BL_Todo(Configuration.GetConnectionString("devconnection"))
+            );
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<BL_Action>(provider =>
+           new BL_Action(Configuration.GetConnectionString("devconnection"))
+           );
 
+            services.AddScoped<BL_AddTeam>(provider =>
+          new BL_AddTeam(Configuration.GetConnectionString("devconnection"))
+          );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,7 +76,7 @@ namespace JiraMigrate
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Authentication}/{action=Login}/{id?}");
             });
         }
     }

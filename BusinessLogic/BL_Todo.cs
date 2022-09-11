@@ -12,7 +12,11 @@ namespace BusinessLogic
 {
     public class BL_Todo
     {
-
+        DAL_Todo connectionStringTodo;
+        public BL_Todo(string connectionString)
+        {
+            this.connectionStringTodo = new DAL_Todo(connectionString);
+        }
         public void SaveTodo(TaskTableViewModel model)
         {
             TaskDataTable AddTask = new TaskDataTable();
@@ -43,7 +47,7 @@ namespace BusinessLogic
             AddTask.LableList = LableList2;
 
 
-            new DAL_Todo().SaveTodo(AddTask);
+            connectionStringTodo.SaveTodo(AddTask);
 
         }
 
@@ -52,7 +56,7 @@ namespace BusinessLogic
 
 
             List<TaskTableViewModel> TaskList = new List<TaskTableViewModel>();
-            List<TaskDataTable> FilterTaskList = new DAL_Todo().TaskList(userId, id);
+            List<TaskDataTable> FilterTaskList = connectionStringTodo.TaskList(userId, id);
             foreach (var item in FilterTaskList)
             {
                 TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
@@ -75,83 +79,84 @@ namespace BusinessLogic
 
         }
 
-        //public TaskTableViewModel GetFilterTaskt(int userId, int taskId,int statusId)
-        //{
-        //    List<TaskDataTable> FilterTaskList = new DAL_Todo().TaskList(userId, statusId);
-        //    TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
-        //    foreach (var item in FilterTaskList)
-        //    {
-        //        if (item.taskId == taskId) {
-        //            taskTableViewModel.description = item.description;
-        //            taskTableViewModel.taskId = item.taskId;
-        //            taskTableViewModel.taskName = item.taskName;
-        //            taskTableViewModel.taskStatus = item.taskStatus;
-        //            taskTableViewModel.assigneeId = item.assigneeId;
-        //            taskTableViewModel.userName = item.userName;
-        //        }
-        //    }
-        //    return taskTableViewModel;
+        public TaskTableViewModel GetFilterTaskt(int userId, int taskId, int statusId)
+        {
+            List<TaskDataTable> FilterTaskList = connectionStringTodo.TaskList(userId, statusId);
+            TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
+            foreach (var item in FilterTaskList)
+            {
+                if (item.taskId == taskId)
+                {
+                    taskTableViewModel.description = item.description;
+                    taskTableViewModel.taskId = item.taskId;
+                    taskTableViewModel.taskName = item.taskName;
+                    taskTableViewModel.taskStatus = item.taskStatus;
+                    taskTableViewModel.assigneeId = item.assigneeId;
+                    taskTableViewModel.userName = item.userName;
+                }
+            }
+            return taskTableViewModel;
 
 
-        //}
+        }
 
-        //public List<TaskTableViewModel> ActiveList(int userId,int id)
-        //{
-
-
-        //    List<TaskTableViewModel> Active = new List<TaskTableViewModel>();
-
-        //    List<TaskDataTable> ActiveList = new DAL_Todo().TaskList(userId, id);
-
-        //    foreach (var item in ActiveList)
-        //    {
-        //        TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
-
-        //        taskTableViewModel.description = item.description;
-        //        taskTableViewModel.taskId = item.taskId;
-        //        taskTableViewModel.taskName = item.taskName;
-        //        taskTableViewModel.taskStatus = item.taskStatus;
-        //        taskTableViewModel.assigneeId = item.assigneeId;
-        //        taskTableViewModel.userName= item.userName;
-
-        //        Active.Add(taskTableViewModel);
-        //    }
-        //    return Active;
-
-        //}
-        //public List<TaskTableViewModel> CompletedList(int userId,int id)
-        //{
-
-        //    List<TaskTableViewModel> Completed = new List<TaskTableViewModel>();
-
-        //    List<TaskDataTable> CompletedList = new DAL_Todo().TaskList(userId,id);
-        //    foreach (var item in CompletedList)
-        //    {
-        //        TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
-
-        //        taskTableViewModel.description = item.description;
-        //        taskTableViewModel.taskId = item.taskId;
-        //        taskTableViewModel.taskName = item.taskName;
-        //        taskTableViewModel.taskStatus = item.taskStatus;
-        //        taskTableViewModel.assigneeId = item.assigneeId;
-        //        taskTableViewModel.userName = item.userName;
+        public List<TaskTableViewModel> ActiveList(int userId, int id)
+        {
 
 
-        //        Completed.Add(taskTableViewModel);
-        //    }
+            List<TaskTableViewModel> Active = new List<TaskTableViewModel>();
 
-        //    return Completed;
+            List<TaskDataTable> ActiveList = connectionStringTodo.TaskList(userId, id);
 
-        //}
+            foreach (var item in ActiveList)
+            {
+                TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
+
+                taskTableViewModel.description = item.description;
+                taskTableViewModel.taskId = item.taskId;
+                taskTableViewModel.taskName = item.taskName;
+                taskTableViewModel.taskStatus = item.taskStatus;
+                taskTableViewModel.assigneeId = item.assigneeId;
+                taskTableViewModel.userName = item.userName;
+
+                Active.Add(taskTableViewModel);
+            }
+            return Active;
+
+        }
+        public List<TaskTableViewModel> CompletedList(int userId, int id)
+        {
+
+            List<TaskTableViewModel> Completed = new List<TaskTableViewModel>();
+
+            List<TaskDataTable> CompletedList = connectionStringTodo.TaskList(userId, id);
+            foreach (var item in CompletedList)
+            {
+                TaskTableViewModel taskTableViewModel = new TaskTableViewModel();
+
+                taskTableViewModel.description = item.description;
+                taskTableViewModel.taskId = item.taskId;
+                taskTableViewModel.taskName = item.taskName;
+                taskTableViewModel.taskStatus = item.taskStatus;
+                taskTableViewModel.assigneeId = item.assigneeId;
+                taskTableViewModel.userName = item.userName;
+
+
+                Completed.Add(taskTableViewModel);
+            }
+
+            return Completed;
+
+        }
 
         public void Delete(int id)
         {
 
-            new DAL_Todo().DeleteRecord(id);
+            connectionStringTodo.DeleteRecord(id);
         }
         public List<CommonDropdownType> GetStatusList()
         {
-            List<StatusTable> StatusList = new DAL_Todo().StatusList();
+            List<StatusTable> StatusList = connectionStringTodo.StatusList();
             List<CommonDropdownType> statusDropdownList = new List<CommonDropdownType>();
             foreach (var item in StatusList)
             {
@@ -168,7 +173,7 @@ namespace BusinessLogic
         public void MoveToToDo(int Id)
         {
 
-            new DAL_Todo().MoveNext(Id,1);
+            connectionStringTodo.MoveNext(Id, 1);
 
 
 
@@ -176,7 +181,7 @@ namespace BusinessLogic
         public void MoveToActive(int Id)
         {
 
-            new DAL_Todo().MoveNext(Id, 2);
+            connectionStringTodo.MoveNext(Id, 2);
 
 
 
@@ -185,7 +190,7 @@ namespace BusinessLogic
         public void MoveToCompleted(int Id)
         {
 
-            new DAL_Todo().MoveNext(Id, 3);
+            connectionStringTodo.MoveNext(Id, 3);
 
 
 
@@ -195,7 +200,7 @@ namespace BusinessLogic
         {
 
             List<CommonDropdownType> userList = new List<CommonDropdownType>();
-            foreach (var item in new DAL_Todo().UserList())
+            foreach (var item in connectionStringTodo.UserList())
             {
                 CommonDropdownType user = new CommonDropdownType();
 
@@ -218,7 +223,7 @@ namespace BusinessLogic
             updateTable.taskId = model.taskId;
             updateTable.assigneeId = model.assigneeId;
 
-            new DAL_Todo().UpdateTask(updateTable);
+            connectionStringTodo.UpdateTask(updateTable);
 
 
         }
@@ -226,7 +231,7 @@ namespace BusinessLogic
         public List<UserSignupViewModel> GetAllUserList()
         {
             List<UserSignupViewModel> user = new List<UserSignupViewModel>();
-            List<User> userList = new DAL_Todo().GetAllUserList();
+            List<User> userList = connectionStringTodo.GetAllUserList();
 
             foreach (var item in userList)
             {
@@ -250,7 +255,7 @@ namespace BusinessLogic
         {
 
             List<CommonDropdownType> roleList = new List<CommonDropdownType>();
-            foreach (var item in new DAL_Todo().RoleList())
+            foreach (var item in connectionStringTodo.RoleList())
             {
                 CommonDropdownType role = new CommonDropdownType();
 
@@ -266,7 +271,7 @@ namespace BusinessLogic
         public List<UserSignupViewModel> GetEditUserList(int id)
         {
             List<UserSignupViewModel> user = new List<UserSignupViewModel>();
-            List<User> userList = new DAL_Todo().GetEditUserList(id);
+            List<User> userList = connectionStringTodo.GetEditUserList(id);
 
             foreach (var item in userList)
             {
@@ -298,12 +303,12 @@ namespace BusinessLogic
             update.Password = model.Password;
             update.Id = model.Id;
 
-            new DAL_Todo().UpdateUser(update);
+             connectionStringTodo.UpdateUser(update);
         }
 
         public int TaskList(int id)
         {
-            List<TaskDataTable> taskList = new DAL_Todo().GetTaskList(id);
+            List<TaskDataTable> taskList = connectionStringTodo.GetTaskList(id);
             List<TaskDataTable> tempTasklist = new List<TaskDataTable>();
             foreach (var task in taskList)
             {
@@ -320,13 +325,13 @@ namespace BusinessLogic
 
         public void DeleteUser(int id)
         {
-            new DAL_Todo().DeleteUser(id);
+            connectionStringTodo.DeleteUser(id);
         }
 
         public List<TaskTableViewModel> UserTaskList(int id)
         {
             List<TaskTableViewModel> users = new List<TaskTableViewModel>();
-            List<TaskDataTable> taskList = new DAL_Todo().GetUserTaskList(id);
+            List<TaskDataTable> taskList = connectionStringTodo.GetUserTaskList(id);
             foreach (var item in taskList)
             {
                 TaskTableViewModel model = new TaskTableViewModel();
@@ -350,20 +355,20 @@ namespace BusinessLogic
 
         public void UnassigneeUser(int id)
         {
-            new DAL_Todo().UnassigneeUser(id);
+            connectionStringTodo.UnassigneeUser(id);
         }
         public void AddFlag(FlagViewModel model)
         {
             Flag Flag = new Flag();
             Flag.FlagName = model.FlagName;
 
-            new DAL_Todo().AddFlag(Flag);
+            connectionStringTodo.AddFlag(Flag);
         }
         public List<FlagViewModel> GetFlagList()
         {
 
             List<FlagViewModel> Flaglist = new List<FlagViewModel>();
-            List<Flag> Flags = new DAL_Todo().GetFlagList();
+            List<Flag> Flags = connectionStringTodo.GetFlagList();
 
             foreach (var item in Flags)
             {
@@ -390,14 +395,14 @@ namespace BusinessLogic
             LableList lableList = new LableList();
             lableList.LableName = model.LableName;
 
-            new DAL_Todo().SaveLable(lableList);
+             connectionStringTodo.SaveLable(lableList);
         }
 
         public List<LableListViewModel> GetLableList()
         {
             List<LableListViewModel> lableListViewModels = new List<LableListViewModel>();
 
-            List<LableList> lableList = new DAL_Todo().GetLableList();
+            List<LableList> lableList = connectionStringTodo.GetLableList();
 
             foreach (var item in lableList)
             {
@@ -416,7 +421,7 @@ namespace BusinessLogic
         {
             List<SprintListViewModel> listViewModels = new List<SprintListViewModel>();
 
-            List<SprintList> lableList = new DAL_Todo().GetSprintList();
+            List<SprintList> lableList = connectionStringTodo.GetSprintList();
 
             foreach (var item in lableList)
             {
@@ -435,13 +440,13 @@ namespace BusinessLogic
             SprintList sprintList = new SprintList();
             sprintList.SprintName = model.SprintName;
 
-            new DAL_Todo().SaveSprint(sprintList);
+            connectionStringTodo.SaveSprint(sprintList);
         }
 
         public List<CommonDropdownType> GetAllLableList()
         {
             List<CommonDropdownType> labels = new List<CommonDropdownType>();
-            foreach (var item in new DAL_Todo().GetLableList())
+            foreach (var item in  connectionStringTodo.GetLableList())
             {
                 CommonDropdownType label = new CommonDropdownType();
 
@@ -458,7 +463,7 @@ namespace BusinessLogic
         public List<CommonDropdownType> GetAllSprintList()
         {
             List<CommonDropdownType> Sprints = new List<CommonDropdownType>();
-            foreach (var item in new DAL_Todo().GetSprintList())
+            foreach (var item in connectionStringTodo.GetSprintList())
             {
                 CommonDropdownType model = new CommonDropdownType();
                 model.id = item.SprintId;
@@ -475,7 +480,7 @@ namespace BusinessLogic
         {
 
             List<LableListViewModel> lablelist = new List<LableListViewModel>();
-            List<LableList> lables = new DAL_Todo().GetLableList();
+            List<LableList> lables = connectionStringTodo.GetLableList();
 
             foreach (var item in lables)
             {

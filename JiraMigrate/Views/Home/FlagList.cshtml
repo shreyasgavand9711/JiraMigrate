@@ -1,0 +1,89 @@
+﻿@model List<ViewModel.FlagViewModel>
+@{
+    ViewBag.Title = "FlagList";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+
+    <h1 style="text-align:center">Flag List</h1>
+
+    @*<a href="@Url.Action("CreateTeam")" class="btn btn-success">Create Team</a>*@
+    @*<button type="button" onclick="ViewTeamMember(TeamID)" class="btn btn-success" data-toggle="modal" data-target="#edit_modal">Add Flag</button>*@
+<a href="@Url.Action("AddFlag", "Home")" class="btn btn-success" style="float:right">Create Flag</a>
+    @*<button style="float:right;margin-right:100px;">@Html.ActionLink("Create Flag", "CreateFlag", "Home")</button>*@
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>Flag Name</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="text-align:center">
+
+                    <td>@item.FlagName</td>
+
+                </tr>
+            }
+
+
+
+        </tbody>
+
+    </table>
+}
+
+
+@*<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style=" text-align: -webkit-center; !important">
+            <div class="modal-content" style="width:800px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Member Of Team</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-id" style="height: 300px; overflow-y: auto">
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default common-cancel" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+
+        <script>
+
+
+            function ViewTeamMember(id) {
+                commonAjaxCall({
+                    /* window.location.replace("/Home/Delete?id="+id);*/
+                    url: "/AddTeam/TeamMemberList?TeamID=" + id,
+                    success: (response) => {
+
+                        if (response.data != false) {
+
+                            $("#modal-body-id").html(response.data);
+                        }
+                        else {
+
+
+                        }
+                    }
+                })
+
+            }
+
+
+
+
+        </script>
+    }*@
+

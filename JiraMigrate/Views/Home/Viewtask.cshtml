@@ -1,0 +1,87 @@
+﻿@model List<ViewModel.TaskTableViewModel>
+@{
+    //ViewBag.Title = "View task";
+    //Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+    Layout = null;
+}
+
+@*@section Grid{*@
+
+
+
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+
+                    <th>TaskName</th>
+                    <th>Role</th>
+                    <th>Description</th>
+                    <th>UserName</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody" style="height:200px;overflow-x:scroll; overflow-y:scroll">
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.taskId">
+
+                        <td id="taskname">@item.taskName </td>
+                        @*<td id="roleId">@item.statusName</td>*@
+                        <td id="descriptionid">@item.description</td>
+                        <td id="userId">@item.userName</td>
+                        <td>
+
+
+                            @*<a href="@Url.Action("UnassigneeUser",new {id = item.taskId })" class="btn btn-success">Unassignee</a>*@
+                            <button type="button" onclick="UnassigneeTask(@item.taskId)" class="btn btn-success">Unassignee</button>
+                        </td>
+
+
+                    </tr>
+
+                }
+            </tbody>
+
+        </table>
+       
+
+    </div>
+
+    
+
+@*}*@
+
+@*@section scripts{*@
+
+    <script>
+
+        function UnassigneeTask(id) {
+            commonAjaxCall({
+                /* window.location.replace("/Home/Delete?id="+id);*/
+                url: "/Home/UnassigneeUser?id=" + id,
+                success: (response) => {
+                    if (response.data == true) {
+                        $('#' + id).remove();
+                        let findTr = $("#tbody").find('tr');
+                       
+                        if (findTr.length == 0) {
+                            
+
+                            $("#edit_modal").modal('hide');
+                        }
+                    }
+                    else {
+                       
+
+                    }
+
+                }
+            })
+
+        }
+       
+
+
+    </script>
+@*}*@

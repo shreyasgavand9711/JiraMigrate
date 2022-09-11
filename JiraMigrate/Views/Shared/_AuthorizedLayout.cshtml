@@ -5,19 +5,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
-    var userActions = (List<ViewModel.UserActions>)HttpContextAccessor.HttpContext.Session.GetObject<object>("Actions");
+    var userActions = HttpContextAccessor.HttpContext.Session.GetObject<IEnumerable<ViewModel.UserActions>>("Actions");
 }
-<div class="container">
-    <div class="col-lg-2">
+
+    <div class="col-2">
         @{Html.RenderPartial("PartialSideBar", userActions);}
     </div>
-    @*<div class="col-lg-4">
+    @*<div class="col-4">
             @RenderSection("AddTaskForm", false)
         </div>*@
-    <div class="col-lg-10">
+    <div class="col-10">
         @RenderSection("Grid", false)
     </div>
-</div>
+
 @section scripts{
     @RenderSection("scripts", false)
 }

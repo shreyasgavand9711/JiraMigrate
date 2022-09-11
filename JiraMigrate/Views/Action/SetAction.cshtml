@@ -1,0 +1,59 @@
+﻿@model ViewModel.UserActions
+@{
+    ViewBag.Title = "SetAction";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+
+
+
+@section Grid
+ {
+    <h1 style="text-align:center">Create Action</h1>
+
+    @using (Html.BeginForm("SetAction", "Action", FormMethod.Post))
+    {
+
+        <div class="pb-1">
+            <label>Action Name</label>
+            <div>
+                @Html.TextBoxFor(x => x.ActionName, new { Style = "width:25%" })
+                @Html.ValidationMessageFor(x => x.ActionName, "", new { @class = "text-danger" })
+           </div>
+           
+        </div>
+        <div class="pb-1">
+            <label>Controller Name</label>
+            <div>
+                @Html.TextBoxFor(x => x.ControllerName, new { Style = "width:25%" })
+               @Html.ValidationMessageFor(x => x.ControllerName, "", new { @class = "text-danger" })
+            </div>
+           
+        </div>
+        <div class="pb-1">
+            <label>Display Name</label>
+            <div>
+                @Html.TextBoxFor(x => x.DisplayName, new { Style = "width:25%" })
+                @Html.ValidationMessageFor(x => x.DisplayName, "", new { @class = "text-danger" })
+            </div>
+            
+        </div>
+        <div class="pb-1">
+            <label>Show In Side Bar</label>
+            <div style="display:inline-block;margin-left:15px">@Html.CheckBoxFor(x => x.ShowInSideBar)</div>
+        </div>
+        <div class="pb-1">
+            <label style="display:block;">Access Role To</label>
+            <option ></option>
+            <select id="Role" name="AccessRolls" class="select-2 col-lg-3" multiple>
+                <option value="1">Admin</option>
+                <option value="1">Admin</option>
+                <option value="2">HR</option>
+                <option value="3">User</option>
+
+            </select>
+        </div>
+        <div class="pb-1">
+            <button type="submit" class="btn btn-success" style="float: right;">Add</button>
+        </div>
+    }
+}

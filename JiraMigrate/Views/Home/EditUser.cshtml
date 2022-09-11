@@ -1,0 +1,115 @@
+﻿@model ViewModel.UserSignupViewModel
+@{
+    ViewBag.Title = "EditUser";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", id = "firstName-id" } })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", id = "lastName-id" } })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.RoleId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+
+            <select id="rid" name="roleid" class="select-2 col-lg-3">
+
+                @foreach (var item in Model.RoleIdList)
+                {
+                    if (item.id == Model.RoleId)
+                    {
+                        <option value="@item.id" selected>@item.text</option>
+                    }
+                    else
+                    {
+                        <option value="@item.id">@item.text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", id = "userName-id" } })
+            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password", id = "password-id" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div style="visibility:hidden">
+        @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", type = "password", id = "userid-id" } })
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" value="Update" onclick="UpdateUser()" class="btn btn-default" />
+            <a href="@Url.Action("UserManagement")" class="btn btn-default">  Back </a>
+        </div>
+    </div>
+
+    
+
+</div>
+
+
+
+}
+@section scripts{
+    <script>
+
+        function UpdateUser() {
+            let model ={
+                Username: $("#userName-id").val(),
+            Password: $("#password-id").val(),
+            FirstName: $("#firstName-id").val(),
+            LastName: $("#lastName-id").val(),
+                RoleId: $("#rid").val(),
+                Id: $("#userid-id").val()
+
+                  }
+
+            commonAjaxCall({
+                url: '/home/EditUser',
+                method: 'POST',
+                data: { model },
+                success: res => {
+                    console.log(res)
+                    if (res.data == true) {
+                        //location.reload(true);
+                       window.location.href="/home/UserManagement"
+                    }
+                    else {
+                        CommonNotifier.showInformation("Somthing wrong")
+                    }
+                }
+            });
+        }
+
+        
+
+
+        </script>
+    }
+

@@ -1,0 +1,183 @@
+﻿
+
+@model List<ViewModel.TaskTableViewModel> 
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_AuthorizedLayout.cshtml";
+}
+@section Grid{
+    @*@{Html.RenderPartial("PartialLinksView", "Todo");}*@
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <div class="text-center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Description</th>
+                    <th>UserName</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr id="@item.taskId">
+                    <td id="@("taskname"+item.taskId)">@item.taskName</td>
+                    <td id="@("descriptionid"+item.taskId)">@item.description</td>
+                    <td>@item.userName</td>
+
+                    <td>
+
+                        <a href="@Url.Action("MoveInToActive",new {id = item.taskId })" class="btn btn-success">Move</a>
+                        <button type="button" onclick="editTask(@item.taskId)" id="@("edit_id"+item.taskId)" class="btn btn-success" data-toggle="modal" data-target="#edit_modal">Edit </button>
+                        @*<a href="@Url.Action("Delete",new {id = item.taskId })" class="btn btn-danger">Delete</a>*@
+                        <button type="button" onclick="DeleteTask(@item.taskId)">Delete</button>
+
+                    </td>
+                    <td style="visibility:hidden" id="@("statusid"+item.taskId)">@item.taskStatus</td>
+                    <td style="visibility:hidden" id="@("userid"+item.taskId)">@item.assigneeId</td>
+                    <td style="visibility:hidden" id="@("Reportuserid"+item.taskId)">@item.reporterId</td>
+                    <td style="visibility:hidden" id="@("taskid"+item.taskId)">@item.taskId</td>
+
+
+
+                </tr>
+
+
+
+                }
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+
+
+    <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body-id">
+                    @{Html.RenderPartial("PartialViewForAddTask", Model[0]);}
+
+
+                    <br />
+                    ...
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+}
+
+
+@section scripts{
+
+    <script>
+
+
+        function DeleteTask(id) {
+            CommonNotifier.showConfirmationWithCallback("task deleted", function () {
+                Delete(id)
+            })
+        }
+        function Delete(id) {
+            commonAjaxCall({
+                /* window.location.replace("/Home/Delete?id="+id);*/
+                url: "/Home/Delete?id=" + id,
+                success: (response) => {
+                    if (response.data == true) {
+                        $('#' + id).remove();
+                    }
+                    else {
+                        CommonNotifier.showInformation("Somthing wrong")
+
+                    }
+
+                }
+            })
+
+        }
+
+        function editTask(id) {
+            let tasnameTd = $("#taskname" + id).text();
+            $("#taskname-id").val(tasnameTd);
+
+            let discriptionTd = $("#descriptionid" + id).text();
+            $("#description-id").val(discriptionTd);
+
+            let tasidTd = $("#taskid" + id).text();
+            $("#taskid-id").val(tasidTd);
+
+            let statusTd = $("#statusid" + id).text();
+            $("#status-id").val(statusTd);
+            $("#status-id").select2()
+
+            let userTd = $("#userid" + id).text();
+            if (userTd != '') {
+                $("#user-id").val(userTd)
+                $("#user-id").select2()
+            }
+            else {
+                $("#user-id").val("")
+                $("#user-id").select2()
+            }
+
+            let ReportuserTd = $("#Reportuserid" + id).text();
+            if (userTd != '') {
+                $("#user-id").val(ReportuserTd)
+                $("#user-id").select2()
+            }
+            else {
+                $("#user-id").val("")
+                $("#user-id").select2()
+            }
+
+        }
+
+        function ChekSelected(id) {
+
+            let model = {
+                taskId: $('#taskid-id').val(),
+                taskName: $('#taskname-id').val(),
+                description: $('#description-id').val(),
+                taskStatus: $('#status-id').val(),
+                assigneeId: $('#user-id').val(),
+            }
+
+            console.log(model)
+
+            commonAjaxCall({
+                url: '/home/UpdateTask',
+                method: 'POST',
+                data: { model },
+                success: res => {
+                    console.log(res)
+                    if (res.data == true) {
+                        location.reload(true);
+                    }
+                    else {
+                        CommonNotifier.showInformation("Somthing wrong")
+                    }
+                }
+            });
+        }
+
+    </script>
+}
